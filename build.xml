@@ -78,8 +78,77 @@
 
   <target name="wordcount" depends="wordcount-clean,wordcount-compile,wordcount-upload-input,wordcount-run,wordcount-output"/>
 
+  <!-- Wordcount program targetrs -->
+  <target name="wordlength-clean" depends="init">
+     <delete file="wordlength.jar" />
+     <delete dir="${outputDir}" />
+  </target>
+
+  <target name="wordlength-compile" depends="prepare">
+    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
+    <jar destfile="wordlength.jar" basedir="${outputDir}" />
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="" />
+    </exec>
+  </target>
+
+  <target name="wordlength-upload-input" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-rmr"/>
+      <arg value="/user/sringwelski/wordlength/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-mkdir"/>
+      <arg value="/user/sringwelski/wordlength/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-copyFromLocal"/>
+      <arg value="${dataDir}/file01"/>
+      <arg value="/user/sringwelski/wordlength/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-copyFromLocal"/>
+      <arg value="${dataDir}/file02"/>
+      <arg value="/user/sringwelski/wordlength/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-ls"/>
+      <arg value="/user/sringwelski/wordlength/input"/>
+    </exec>
+  </target>
+
+  <target name="wordlength-run" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-rmr"/>
+      <arg value="/user/sringwelski/wordlength/output"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="jar"/>
+      <arg value="wordlength.jar"/>
+      <arg value="com.sgringwe.wordlength.WordLengthJob"/>
+      <arg value="/user/sringwelski/wordlength/input"/>
+      <arg value="/user/sringwelski/wordlength/output"/>
+    </exec>
+  </target>
+
+  <target name="wordlength-output" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-cat"/>
+      <arg value="/user/sringwelski/wordlength/output/part-00000"/>
+    </exec>
+  </target>
+
+  <target name="wordlength" depends="wordlength-clean,wordlength-compile,wordlength-upload-input,wordlength-run,wordlength-output"/>
+
   <!-- Combined calls -->
-  <target name="clean" depends="wordcount-clean"/>
+  <target name="clean" depends="wordcount-clean,wordlength-clean"/>
 
   <target name="deploy" depends="wordcount-compile,init">
     <copydir src="${jsp}" dest="${deployJSP}"/>
