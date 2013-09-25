@@ -1,0 +1,79 @@
+<project name="hadoop-presentation" default="deploy" basedir=".">
+  <target name="init">
+     <property environment="env" />
+     <property name="sourceDir" value="src" />
+     <property name="dataDir" value="data" />
+     <property name="outputDir" value="classes" />
+  </target>
+  <target name="prepare" depends="wordcount-clean">
+     <mkdir dir="${outputDir}" />
+  </target>
+
+  <!-- Wordcount program targetrs -->
+  <target name="wordcount-clean" depends="init">
+     <delete file="wordcount.jar" />
+     <delete dir="${outputDir}" />
+  </target>
+  <target name="wordcount-compile" depends="prepare">
+    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
+    <jar destfile="wordcount.jar" basedir="${outputDir}" />
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="" />
+    </exec>
+  </target>
+  <target name="wordcount-upload-input" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-rmr"/>
+      <arg value="/user/sringwelski/wordcount/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-mkdir"/>
+      <arg value="/user/sringwelski/wordcount/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-copyFromLocal"/>
+      <arg value="${dataDir}/file01"/>
+      <arg value="/user/sringwelski/wordcount/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-copyFromLocal"/>
+      <arg value="${dataDir}/file02"/>
+      <arg value="/user/sringwelski/wordcount/input"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-ls"/>
+      <arg value="/user/sringwelski/wordcount/input"/>
+    </exec>
+  </target>
+  <target name="wordcount-run" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-rmr"/>
+      <arg value="/user/sringwelski/wordcount/output"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="jar"/>
+      <arg value="wordcount.jar"/>
+      <arg value="com.sgringwe.wordcount.WordCountJob"/>
+      <arg value="/user/sringwelski/wordcount/input"/>
+      <arg value="/user/sringwelski/wordcount/output"/>
+    </exec>
+  </target>
+  <target name="wordcount-output" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-cat"/>
+      <arg value="/user/sringwelski/wordcount/output/part-00000"/>
+    </exec>
+  </target>
+  <target name="wordcount" depends="wordcount-clean,wordcount-compile,wordcount-upload-input,wordcount-run,wordcount-output"/>
+  <target name="deploy" depends="wordcount-compile,init">
+    <copydir src="${jsp}" dest="${deployJSP}"/>
+    <copyfile src="server.properties" dest="${deployProperties}"/>
+  </target>
+</project>

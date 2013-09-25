@@ -1,4 +1,4 @@
-javac -classpath ${HADOOP_HOME}/hadoop-${HADOOP_VERSION}-core.jar -d wordcount_classes WordCount.java
+javac -classpath ${HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar -d wordcount_classes src/WordCountJob.java
 jar -cvf wordcount.jar -C wordcount_classes/ .
 
 bin/hadoop dfs -mkdir /user/sringwelski/wordcount/output
