@@ -147,11 +147,49 @@
 
   <target name="wordlength" depends="wordlength-clean,wordlength-compile,wordlength-upload-input,wordlength-run,wordlength-output"/>
 
-  <!-- Combined calls -->
-  <target name="clean" depends="wordcount-clean,wordlength-clean"/>
-
-  <target name="deploy" depends="wordcount-compile,init">
-    <copydir src="${jsp}" dest="${deployJSP}"/>
-    <copyfile src="server.properties" dest="${deployProperties}"/>
+  <!-- Wordcount program targetrs -->
+  <target name="ustrades-clean" depends="init">
+     <delete file="ustrades.jar" />
+     <delete dir="${outputDir}" />
   </target>
+
+  <target name="ustrades-compile" depends="prepare">
+    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
+    <jar destfile="ustrades.jar" basedir="${outputDir}" />
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="" />
+    </exec>
+  </target>
+
+  <target name="ustrades-upload-input" depends="init">
+    <!-- 166mb file. it stays there -->
+  </target>
+
+  <target name="ustrades-run" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-rmr"/>
+      <arg value="/user/sringwelski/ustrades/output"/>
+    </exec>
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="jar"/>
+      <arg value="ustrades.jar"/>
+      <arg value="com.sgringwe.ustrades.USTradesJob"/>
+      <arg value="/user/sringwelski/ustrades/input"/>
+      <arg value="/user/sringwelski/ustrades/output"/>
+    </exec>
+  </target>
+
+  <target name="ustrades-output" depends="init">
+    <exec executable="${env.HADOOP_HOME}/bin/hadoop">
+      <arg value="dfs"/>
+      <arg value="-cat"/>
+      <arg value="/user/sringwelski/ustrades/output/part-00000"/>
+    </exec>
+  </target>
+
+  <target name="ustrades" depends="ustrades-clean,ustrades-compile,ustrades-upload-input,ustrades-run,ustrades-output"/>
+
+  <!-- Combined calls -->
+  <target name="clean" depends="wordcount-clean,wordlength-clean,ustrades-clean"/>
 </project>
