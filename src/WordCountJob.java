@@ -1,4 +1,4 @@
-package org.myorg;
+package com.sgringwe.wordcount;
      
 import java.io.IOException;
 import java.util.*;
@@ -9,7 +9,7 @@ import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapred.*;
 import org.apache.hadoop.util.*;
     
-public class WordCount {
+public class WordCountJob {
   public static class Map extends MapReduceBase implements Mapper<LongWritable, Text, Text, IntWritable> {
     private final static IntWritable one = new IntWritable(1);
     private Text word = new Text();
@@ -35,7 +35,7 @@ public class WordCount {
   }
 
   public static void main(String[] args) throws Exception {
-    JobConf conf = new JobConf(WordCount.class);
+    JobConf conf = new JobConf(WordCountJob.class);
     conf.setJobName("wordcount");
 
     conf.setOutputKeyClass(Text.class);
