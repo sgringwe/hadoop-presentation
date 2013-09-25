@@ -14,6 +14,7 @@
      <delete file="wordcount.jar" />
      <delete dir="${outputDir}" />
   </target>
+
   <target name="wordcount-compile" depends="prepare">
     <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
     <jar destfile="wordcount.jar" basedir="${outputDir}" />
@@ -21,6 +22,7 @@
       <arg value="" />
     </exec>
   </target>
+
   <target name="wordcount-upload-input" depends="init">
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
@@ -50,6 +52,7 @@
       <arg value="/user/sringwelski/wordcount/input"/>
     </exec>
   </target>
+
   <target name="wordcount-run" depends="init">
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
@@ -64,6 +67,7 @@
       <arg value="/user/sringwelski/wordcount/output"/>
     </exec>
   </target>
+
   <target name="wordcount-output" depends="init">
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
@@ -71,7 +75,12 @@
       <arg value="/user/sringwelski/wordcount/output/part-00000"/>
     </exec>
   </target>
+
   <target name="wordcount" depends="wordcount-clean,wordcount-compile,wordcount-upload-input,wordcount-run,wordcount-output"/>
+
+  <!-- Combined calls -->
+  <target name="clean" depends="wordcount-clean"/>
+
   <target name="deploy" depends="wordcount-compile,init">
     <copydir src="${jsp}" dest="${deployJSP}"/>
     <copyfile src="server.properties" dest="${deployProperties}"/>

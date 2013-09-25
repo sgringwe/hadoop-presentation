@@ -1,12 +1,15 @@
-javac -classpath ${HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar -d wordcount_classes src/WordCountJob.java
-jar -cvf wordcount.jar -C wordcount_classes/ .
+A few simple map reduce jobs for demonstration and learning purposes.
 
-bin/hadoop dfs -mkdir /user/sringwelski/wordcount/output
+# Wordcount
+Wordcount is a job to count the number of words in multiple files
 
-bin/hadoop dfs -copyFromLocal ~/Code/hadoop-presentation/data/file02 /user/sringwelski/wordcount/input
+ant tasks:
 
-bin/hadoop dfs -cat /user/sringwelski/wordcount/input/file01
+wordcount-clean
+wordcount-upload-input
+wordcount-compile
+wordcount-run
+wordcount-output
 
-bin/hadoop jar ~/Code/hadoop-presentation/wordcount.jar com.sgringwe.wordcount.WordCountJob /user/sringwelski/wordcount/input /user/sringwelski/wordcount/output2
-
-bin/hadoop dfs -cat /user/sringwelski/wordcount/output2/part-00000
+To run all at once:
+wordcount
