@@ -78,7 +78,7 @@
 
   <target name="wordcount" depends="wordcount-clean,wordcount-compile,wordcount-upload-input,wordcount-run,wordcount-output"/>
 
-  <!-- Wordcount program targetrs -->
+  <!-- Wordlength program targetrs -->
   <target name="wordlength-clean" depends="init">
      <delete file="wordlength.jar" />
      <delete dir="${outputDir}" />
@@ -147,7 +147,7 @@
 
   <target name="wordlength" depends="wordlength-clean,wordlength-compile,wordlength-upload-input,wordlength-run,wordlength-output"/>
 
-  <!-- Wordcount program targetrs -->
+  <!-- ustrades program targetrs -->
   <target name="ustrades-clean" depends="init">
      <delete file="ustrades.jar" />
      <delete dir="${outputDir}" />
