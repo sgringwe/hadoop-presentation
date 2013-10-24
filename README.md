@@ -1,5 +1,9 @@
 A few simple map reduce jobs for demonstration and learning purposes.
 
+* Configuration for building/compiling project in build.xml properties.
+* Assumes HADOOP_HOME environmental variable in bash profile file.
+* Be sure to change the package name in each hadoop run command (wordcount-run, etc.)
+
 # Wordcount
 Wordcount is a job to count the number of words in multiple files
 

@@ -4,6 +4,8 @@
      <property name="sourceDir" value="src" />
      <property name="dataDir" value="data" />
      <property name="outputDir" value="classes" />
+     <property name="hadoopRootFolder" value="/user/sringwelski" />
+     <property name="hadoopCoreJarName" value="hadoop-core-0.20.2-cdh3u3.jar" />
   </target>
   <target name="prepare" depends="wordcount-clean">
      <mkdir dir="${outputDir}" />
@@ -16,7 +18,7 @@
   </target>
 
   <target name="wordcount-compile" depends="prepare">
-    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
+    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/${hadoopCoreJarName}" />
     <jar destfile="wordcount.jar" basedir="${outputDir}" />
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="" />
@@ -27,29 +29,29 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-rmr"/>
-      <arg value="/user/sringwelski/wordcount/input"/>
+      <arg value="${hadoopRootFolder}/wordcount/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-mkdir"/>
-      <arg value="/user/sringwelski/wordcount/input"/>
+      <arg value="${hadoopRootFolder}/wordcount/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-copyFromLocal"/>
       <arg value="${dataDir}/file01"/>
-      <arg value="/user/sringwelski/wordcount/input"/>
+      <arg value="${hadoopRootFolder}/wordcount/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-copyFromLocal"/>
       <arg value="${dataDir}/file02"/>
-      <arg value="/user/sringwelski/wordcount/input"/>
+      <arg value="${hadoopRootFolder}/wordcount/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-ls"/>
-      <arg value="/user/sringwelski/wordcount/input"/>
+      <arg value="${hadoopRootFolder}/wordcount/input"/>
     </exec>
   </target>
 
@@ -57,14 +59,14 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-rmr"/>
-      <arg value="/user/sringwelski/wordcount/output"/>
+      <arg value="${hadoopRootFolder}/wordcount/output"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="jar"/>
       <arg value="wordcount.jar"/>
       <arg value="com.sgringwe.wordcount.WordCountJob"/>
-      <arg value="/user/sringwelski/wordcount/input"/>
-      <arg value="/user/sringwelski/wordcount/output"/>
+      <arg value="${hadoopRootFolder}/wordcount/input"/>
+      <arg value="${hadoopRootFolder}/wordcount/output"/>
     </exec>
   </target>
 
@@ -72,7 +74,7 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-cat"/>
-      <arg value="/user/sringwelski/wordcount/output/part-00000"/>
+      <arg value="${hadoopRootFolder}/wordcount/output/part-00000"/>
     </exec>
   </target>
 
@@ -85,7 +87,7 @@
   </target>
 
   <target name="wordlength-compile" depends="prepare">
-    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
+    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/${hadoopCoreJarName}" />
     <jar destfile="wordlength.jar" basedir="${outputDir}" />
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="" />
@@ -96,29 +98,29 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-rmr"/>
-      <arg value="/user/sringwelski/wordlength/input"/>
+      <arg value="${hadoopRootFolder}/wordlength/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-mkdir"/>
-      <arg value="/user/sringwelski/wordlength/input"/>
+      <arg value="${hadoopRootFolder}/wordlength/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-copyFromLocal"/>
       <arg value="${dataDir}/file01"/>
-      <arg value="/user/sringwelski/wordlength/input"/>
+      <arg value="${hadoopRootFolder}/wordlength/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-copyFromLocal"/>
       <arg value="${dataDir}/file02"/>
-      <arg value="/user/sringwelski/wordlength/input"/>
+      <arg value="${hadoopRootFolder}/wordlength/input"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-ls"/>
-      <arg value="/user/sringwelski/wordlength/input"/>
+      <arg value="${hadoopRootFolder}/wordlength/input"/>
     </exec>
   </target>
 
@@ -126,14 +128,14 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-rmr"/>
-      <arg value="/user/sringwelski/wordlength/output"/>
+      <arg value="${hadoopRootFolder}/wordlength/output"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="jar"/>
       <arg value="wordlength.jar"/>
       <arg value="com.sgringwe.wordlength.WordLengthJob"/>
-      <arg value="/user/sringwelski/wordlength/input"/>
-      <arg value="/user/sringwelski/wordlength/output"/>
+      <arg value="${hadoopRootFolder}/wordlength/input"/>
+      <arg value="${hadoopRootFolder}/wordlength/output"/>
     </exec>
   </target>
 
@@ -141,7 +143,7 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-cat"/>
-      <arg value="/user/sringwelski/wordlength/output/part-00000"/>
+      <arg value="${hadoopRootFolder}/wordlength/output/part-00000"/>
     </exec>
   </target>
 
@@ -154,7 +156,7 @@
   </target>
 
   <target name="ustrades-compile" depends="prepare">
-    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/hadoop-core-0.20.2-cdh3u3.jar" />
+    <javac srcdir="${sourceDir}" destdir="${outputDir}" classpath="${env.HADOOP_HOME}/${hadoopCoreJarName}" />
     <jar destfile="ustrades.jar" basedir="${outputDir}" />
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="" />
@@ -169,14 +171,14 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-rmr"/>
-      <arg value="/user/sringwelski/ustrades/output"/>
+      <arg value="${hadoopRootFolder}/ustrades/output"/>
     </exec>
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="jar"/>
       <arg value="ustrades.jar"/>
       <arg value="com.sgringwe.ustrades.USTradesJob"/>
-      <arg value="/user/sringwelski/ustrades/input"/>
-      <arg value="/user/sringwelski/ustrades/output"/>
+      <arg value="${hadoopRootFolder}/ustrades/input"/>
+      <arg value="${hadoopRootFolder}/ustrades/output"/>
     </exec>
   </target>
 
@@ -184,7 +186,7 @@
     <exec executable="${env.HADOOP_HOME}/bin/hadoop">
       <arg value="dfs"/>
       <arg value="-cat"/>
-      <arg value="/user/sringwelski/ustrades/output/part-00000"/>
+      <arg value="${hadoopRootFolder}/ustrades/output/part-00000"/>
     </exec>
   </target>
 
