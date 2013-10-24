@@ -88,11 +88,17 @@ public class USTradesJob {
 
     public void map(LongWritable key, Text value, OutputCollector<Text, IntWritable> output, Reporter reporter) throws IOException {
       String line = value.toString();
+
+      // Don't accept the first column, which are headers
       if(!line.startsWith("Commodity_Code")) {
         String[] result = line.split(",(?=([^\"]*\"[^\"]*\")*[^\"]*$)");
+
+        // Column 3 is the country name
         if(result.length > 3) {
           word.set(result[3]);
           // Country country = new Country(word, timestamp);
+
+          // Column 11 is the 'value' column representing how many of that trade occurred.
           if(result.length > 10) {
             output.collect(word, new IntWritable(Integer.parseInt(result[11])));
           }
