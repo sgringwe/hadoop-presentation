@@ -29,7 +29,6 @@ public class WordLengthJob {
       int sum = 0;
       while (values.hasNext()) {
         sum += values.next().get();
-        // sum += 1; // why can't we do this? hint: combiner AND reducer.
       }
       output.collect(key, new IntWritable(sum));
     }
@@ -44,7 +43,6 @@ public class WordLengthJob {
 
     conf.setMapperClass(Map.class);
 
-    // Comment these out to simploy output <word, 1> for each word in the file.
     conf.setCombinerClass(Reduce.class);
     conf.setReducerClass(Reduce.class);
 

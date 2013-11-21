@@ -43,9 +43,8 @@ public class WordCountJob {
 
     conf.setMapperClass(Map.class);
 
-    // Comment these out to simploy output <word, 1> for each word in the file.
-    conf.setCombinerClass(Reduce.class);
-    conf.setReducerClass(Reduce.class);
+    // conf.setCombinerClass(Reduce.class);
+    // conf.setReducerClass(Reduce.class);
 
     conf.setInputFormat(TextInputFormat.class);
     conf.setOutputFormat(TextOutputFormat.class);

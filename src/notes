@@ -1,0 +1,6 @@
+sum += values.next().get();
+// sum += 1; // why can't we do this? hint: combiner AND reducer.
+
+sum += values.next().get();
+
+// comment out reducer and combiner - only map so <map key, 1>
